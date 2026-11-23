@@ -1,8 +1,10 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.exc import IntegrityError
 
 from .core.config import get_settings
@@ -10,6 +12,7 @@ from .core.exceptions import ErrorAplicacion
 from .routes import autores, categorias, libros, prestamos, reportes, socios, auth
 
 settings = get_settings()
+static_dir = Path(__file__).parent / "static"
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
@@ -24,6 +27,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
 
 @app.get("/api/v1/health", tags=["Salud"])
 def health_check() -> dict[str, str]:
@@ -31,15 +36,9 @@ def health_check() -> dict[str, str]:
     return {"status": "ok", "environment": settings.environment}
 
 
-@app.get("/", tags=["Inicio"])
-def raiz() -> dict[str, str]:
-    """Página de entrada con enlaces a la documentación y al resumen."""
-    return {
-        "mensaje": "API de Biblioteca en funcionamiento",
-        "documentacion": "/docs",
-        "openapi": "/openapi.json",
-        "resumen": "/api/v1/reportes/resumen",
-    }
+@app.get("/", include_in_schema=False)
+def raiz() -> FileResponse:
+    return FileResponse(static_dir / "index.html")
 
 
 @app.exception_handler(ErrorAplicacion)
