@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#183c36">
+    <meta name="description" content="Panel de gestión de Biblioteca">
+    <link rel="icon" href="data:,">
+    <title>Biblioteca | Panel de gestión</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="/" aria-label="Biblioteca, inicio">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><path d="M5 7.5c4.2-1.6 8-.9 11 1.8v17c-3-2.7-6.8-3.4-11-1.8v-17Zm22 0c-4.2-1.6-8-.9-11 1.8v17c3-2.7 6.8-3.4 11-1.8v-17Z"/><path d="M16 9v17"/></svg>
+          </span>
+          <span><strong>Biblioteca</strong><small>ESPACIO CULTURAL</small></span>
+        </a>
+        <p class="sidebar-label">MENÚ PRINCIPAL</p>
+        <nav class="side-nav" aria-label="Navegación principal">
+          <button class="nav-link active" data-panel="dashboard-panel" aria-controls="dashboard-panel">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="15" width="7" height="6" rx="1.5"/></svg><span>Resumen</span>
+          </button>
+          <button class="nav-link" data-panel="books-panel" aria-controls="books-panel">
+            <svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H20M8 7h8M8 10h6"/></svg><span>Catálogo</span><span class="nav-count" id="book-nav-count">0</span>
+          </button>
+          <button class="nav-link" data-panel="members-panel" aria-controls="members-panel">
+            <svg viewBox="0 0 24 24"><path d="M16 20v-1.5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4V20"/><circle cx="9.5" cy="7" r="4"/><path d="M17 11a4 4 0 0 0 0-8m4 17v-1.5a4 4 0 0 0-3-3.87"/></svg><span>Socios</span>
+          </button>
+          <button class="nav-link" data-panel="loans-panel" aria-controls="loans-panel">
+            <svg viewBox="0 0 24 24"><path d="M4 5h16v15H4z"/><path d="M8 3v4m8-4v4M4 10h16m-9 4 2 2 4-4"/></svg><span>Préstamos</span><span class="nav-count" id="loan-nav-count">0</span>
+          </button>
+        </nav>
+        <div class="sidebar-note"><span class="note-icon">✦</span><p>Un buen libro puede cambiar el rumbo de un día.</p><small>Que nunca falten historias.</small></div>
+        <div class="sidebar-profile"><span class="profile-avatar">B</span><span><strong>Bibliotecaria</strong><small>Administración</small></span><span class="profile-menu" aria-hidden="true">···</span></div>
+      </aside>
+
+      <div class="main-shell">
+        <header class="topbar">
+          <div class="breadcrumb"><span>Biblioteca</span><span class="crumb-separator">/</span><strong id="current-section">Resumen</strong></div>
+          <div class="topbar-actions"><span class="connection"><span class="connection-dot"></span>Sistema en línea</span><span class="topbar-divider"></span><time id="today-label"></time></div>
+        </header>
+        <main class="page-content">
+          <div id="notice" class="notice" role="status" aria-live="polite"></div>
+          <section id="dashboard-panel" class="panel active">
+            <div class="welcome-banner">
+              <div class="welcome-copy">
+                <p class="eyebrow light">TU BIBLIOTECA, EN UN SOLO LUGAR</p>
+                <h1>Un espacio para<br>cada historia.</h1>
+                <p class="welcome-text">Administra tu catálogo y acompaña a tus lectores desde aquí.</p>
+                <button class="button button-light" data-action="new-book"><span aria-hidden="true">＋</span>Agregar un libro</button>
+              </div>
+              <div class="hero-art" aria-hidden="true"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><div class="hero-book book-back"></div><div class="hero-book book-front"><span>UNA<br>BUENA<br>HISTORIA</span><i>✳</i></div><span class="hero-sparkle sparkle-one">✦</span><span class="hero-sparkle sparkle-two">✧</span></div>
+              <div class="banner-decoration"></div>
+            </div>
+            <div class="stats-grid">
+              <article class="stat-card"><span class="stat-icon icon-mint"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H20"/></svg></span><span class="stat-label">Títulos en catálogo</span><strong class="stat-value" id="stat-titles">—</strong><span class="stat-caption">Libros registrados</span></article>
+              <article class="stat-card"><span class="stat-icon icon-peach"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H20M8 7h8"/></svg></span><span class="stat-label">Ejemplares disponibles</span><strong class="stat-value" id="stat-copies">—</strong><span class="stat-caption">Listos para préstamo</span></article>
+              <article class="stat-card"><span class="stat-icon icon-lavender"><svg viewBox="0 0 24 24"><path d="M16 20v-1.5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4V20"/><circle cx="9.5" cy="7" r="4"/><path d="M17 11a4 4 0 0 0 0-8m4 17v-1.5a4 4 0 0 0-3-3.87"/></svg></span><span class="stat-label">Socios activos</span><strong class="stat-value" id="stat-members">—</strong><span class="stat-caption">Parte de la comunidad</span></article>
+              <article class="stat-card"><span class="stat-icon icon-blue"><svg viewBox="0 0 24 24"><path d="M4 5h16v15H4z"/><path d="M8 3v4m8-4v4M4 10h16"/></svg></span><span class="stat-label">Préstamos activos</span><strong class="stat-value" id="stat-loans">—</strong><span class="stat-caption" id="stat-overdue">En circulación</span></article>
+            </div>
+            <div class="dashboard-grid">
+              <section class="content-card">
+                <div class="card-heading"><div><p class="eyebrow">MOVIMIENTO</p><h2>Préstamos recientes</h2></div><button class="text-button" data-action="view-loans">Ver todos <span aria-hidden="true">→</span></button></div>
+                <div class="table-wrap"><table><thead><tr><th>Libro</th><th>Socio</th><th>Fecha límite</th><th>Estado</th></tr></thead><tbody id="dashboard-loans"></tbody></table></div>
+              </section>
+              <section class="content-card category-card">
+                <div class="card-heading"><div><p class="eyebrow">EXPLORA</p><h2>Tu colección</h2></div><span class="sparkle-mark">✦</span></div>
+                <p class="category-intro">Historias, ideas y descubrimientos esperan a sus próximos lectores.</p>
+                <div id="category-list" class="category-list"></div>
+                <button class="text-button category-link" data-action="view-books">Explorar catálogo <span aria-hidden="true">→</span></button>
+              </section>
+            </div>
+          </section>
+
+          <section id="books-panel" class="panel">
+            <div class="page-heading"><div><p class="eyebrow">TODAS LAS HISTORIAS, A TU ALCANCE</p><h1>Catálogo</h1><p class="page-description">Encuentra un libro para cada curiosidad.</p></div><button class="button button-primary" id="show-book-form"><span aria-hidden="true">＋</span>Nuevo libro</button></div>
+            <div class="reference-actions"><button class="text-button" id="show-author-form">＋ Agregar autor</button><button class="text-button" id="show-category-form">＋ Agregar categoría</button></div>
+            <form id="author-form" class="form-card form-grid hidden">
+              <label>Nombre del autor<input name="nombre" minlength="2" maxlength="100" required></label>
+              <label>Nacionalidad<input name="nacionalidad" maxlength="60"></label>
+              <label>Año de nacimiento<input name="anio_nacimiento" type="number" min="1000" required></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Guardar autor</button></div>
+            </form>
+            <form id="category-form" class="form-card form-grid hidden">
+              <label>Nombre de categoría<input name="nombre" minlength="3" maxlength="50" required></label>
+              <label>Descripción<input name="descripcion" maxlength="200"></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Guardar categoría</button></div>
+            </form>
+            <form id="book-form" class="form-card form-grid hidden">
+              <label>Título<input name="titulo" maxlength="150" required placeholder="Nombre del libro"></label>
+              <label>ISBN de 13 dígitos<input name="isbn" inputmode="numeric" pattern="[0-9]{13}" minlength="13" maxlength="13" required placeholder="9780000000000"></label>
+              <label>Año de publicación<input name="anio_publicacion" type="number" min="1450" required></label>
+              <label>Ejemplares<input name="ejemplares" type="number" min="1" max="50" value="1" required></label>
+              <label>Autor<select name="autor_id" id="book-author" required></select></label>
+              <label>Categorías<select name="categoria_ids" id="book-categories" multiple required size="3"></select><small class="field-help">Usa Ctrl o Cmd para elegir varias.</small></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Guardar libro</button></div>
+            </form>
+            <div class="content-card">
+              <div class="catalog-toolbar"><label class="search-box"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="book-search" type="search" placeholder="Buscar por título, autor o ISBN" aria-label="Buscar libros"></label><label class="filter-box"><span>Categoría</span><select id="category-filter"><option value="">Todas</option></select></label></div>
+              <div class="table-wrap"><table><thead><tr><th>Libro</th><th>Año</th><th>Categoría</th><th>Disponibilidad</th></tr></thead><tbody id="books-table"></tbody></table></div>
+            </div>
+          </section>
+
+          <section id="members-panel" class="panel">
+            <div class="page-heading"><div><p class="eyebrow">LAS PERSONAS HACEN LA BIBLIOTECA</p><h1>Socios</h1><p class="page-description">Conoce a quienes mantienen vivas las historias.</p></div><button class="button button-primary" id="show-member-form"><span aria-hidden="true">＋</span>Nuevo socio</button></div>
+            <form id="member-form" class="form-card form-grid hidden"><label>Nombre completo<input name="nombre" minlength="2" maxlength="100" required placeholder="Nombre del socio"></label><label>Correo electrónico<input name="email" type="email" maxlength="150" required placeholder="nombre@correo.com"></label><label>Teléfono<input name="telefono" minlength="7" maxlength="15" placeholder="Opcional"></label><div class="form-actions"><button class="button button-primary" type="submit">Guardar socio</button></div></form>
+            <div class="content-card"><div class="card-heading member-heading"><div><p class="eyebrow">COMUNIDAD</p><h2>Todos los socios</h2></div><span class="subtle-count" id="member-count-label"></span></div><div class="table-wrap"><table><thead><tr><th>Socio</th><th>Correo electrónico</th><th>Teléfono</th><th>Estado</th></tr></thead><tbody id="members-table"></tbody></table></div></div>
+          </section>
+
+          <section id="loans-panel" class="panel">
+            <div class="page-heading"><div><p class="eyebrow">CADA LIBRO TIENE UN VIAJE</p><h1>Préstamos</h1><p class="page-description">Gestiona entregas, devoluciones y multas.</p></div></div>
+            <form id="loan-form" class="form-card form-grid loan-form"><label>Libro<select name="libro_id" id="loan-book" required></select></label><label>Socio<select name="socio_id" id="loan-member" required></select></label><label>Días de préstamo<input name="dias" type="number" min="1" max="30" value="14" required></label><div class="form-actions"><button class="button button-primary" type="submit">＋ Registrar préstamo</button></div></form>
+            <section class="content-card"><div class="card-heading loan-heading"><div><p class="eyebrow">SEGUIMIENTO</p><h2>Registro de préstamos</h2></div><label class="filter-box"><span>Mostrar</span><select id="loan-status-filter"><option value="activo">Activos</option><option value="vencido">Vencidos</option><option value="devuelto">Devueltos</option><option value="">Todos</option></select></label></div><div class="table-wrap"><table><thead><tr><th>Libro</th><th>Socio</th><th>Fecha de préstamo</th><th>Fecha límite</th><th>Estado</th><th></th></tr></thead><tbody id="loans-table"></tbody></table></div></section>
+          </section>
+        </main>
+        <footer class="page-footer"><span>Biblioteca</span><span>Un lugar para encontrar tu próxima historia.</span></footer>
+      </div>
+    </div>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
